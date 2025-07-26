@@ -1,28 +1,102 @@
-# SpyDash - YouTube Analytics Dashboard
+# 🕵️ SocialSpy - AI-Powered Social Media Analytics
 
-A modern, responsive YouTube analytics dashboard that provides comprehensive insights into YouTube channel performance.
+<div align="center">
+
+![SocialSpy Logo](https://img.shields.io/badge/SocialSpy-AI%20Analytics-2e392e?style=for-the-badge&logo=analytics&logoColor=f8f6f4)
+
+**Worldwide trending content analytics across multiple social media platforms**
+
+[![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Powered by AI](https://img.shields.io/badge/Powered%20by-DeepSeek%20AI-00D4AA?style=flat-square&logo=openai&logoColor=white)](https://openrouter.ai/)
+[![Netlify Status](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white)](https://www.netlify.com/)
+
+</div>
 
 ## 🚀 Features
 
-- **Real-time Analytics**: Fetch and display YouTube channel statistics
-- **AI-Powered Summaries**: Generate intelligent summaries of video content
-- **Modern UI**: Beautiful, responsive design with smooth animations
-- **Secure Authentication**: OTP-based user verification system
-- **Netlify Functions**: Serverless backend for scalability
+### Core Features
+- **Worldwide Trending Content**: Real-time trending videos, posts, and content from multiple platforms
+- **Multi-Platform Support**: YouTube, TikTok, Twitter, Instagram, Reddit (with more coming soon)
+- **AI-Powered Insights**: DeepSeek AI integration for content analysis and trend predictions
+- **Infinite Scroll**: Smooth loading of trending content with pagination
+- **Advanced Analytics**: Comprehensive data collection and visualization
+- **User Authentication**: Email OTP verification for account creation
+- **Responsive Design**: Beautiful UI that works on all devices
+
+### Data Collection
+- **Public Profile Data**: Collect public profile information
+- **Follower Analytics**: Track follower growth and engagement
+- **Like & Engagement Metrics**: Monitor likes, comments, shares
+- **Trend Analysis**: Analyze trending topics and hashtags
+- **Shorts/Short-form Content**: Track short-form video performance
+- **Demographics**: Audience demographic analysis
+- **Sentiment Analysis**: AI-powered sentiment analysis
+- **Geographic Data**: Location-based trending content
+
+### AI Features
+- **AI Chat Assistant**: Powered by DeepSeek via OpenRouter
+- **Content Summaries**: AI-generated content insights
+- **Trend Predictions**: Predictive analytics for upcoming trends
+- **Sentiment Analysis**: Real-time sentiment tracking
+- **Smart Recommendations**: Personalized content suggestions
+
+### User Experience
+- **Modern UI**: Clean design with smooth animations
+- **Toast Notifications**: Real-time feedback and updates
+- **Loading States**: Beautiful loading animations
+- **Error Handling**: Graceful error handling with user-friendly messages
+
+## 🎨 Design System
+
+### Color Palette
+- Primary and background color: `#f8f6f4`
+- Secondary background: `#2e392e`
+- Text, icons, buttons and everything else: `#2e392e`
+
+### Typography
+- **Titles**: EB Garamond (Google Fonts)
+- **Body text**: Figtree (Google Fonts)
+
+### Components
+- Glass morphism effects
+- Smooth animations with CSS transitions
+- Responsive grid layouts
+- Custom scrollbars
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Vite**: Fast build tool and dev server
+- **Vanilla JavaScript**: Modern JavaScript with ES6+ features
+- **CSS3**: Advanced styling with custom properties
+- **Font Awesome**: Icon library
+- **Google Fonts**: Typography (EB Garamond, Figtree)
+
+### AI & APIs
+- **OpenRouter**: AI model access (DeepSeek R1 free models)
+- **YouTube Data API**: Trending content
+- **Reddit API**: Public JSON endpoints for trending content
+- **Custom APIs**: Platform-specific data collection
+
+### Development
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+- **Netlify**: Deployment platform
+- **Netlify Functions**: Serverless backend
 
 ## 📋 Prerequisites
 
 - Node.js (v16 or higher)
 - npm or yarn
-- YouTube Data API v3 key
-- OpenAI API key (optional, for AI summaries)
+- YouTube Data API v3 key (optional)
+- OpenRouter API key (for AI features)
 
 ## 🛠️ Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd SpyDash_Final_Build
+   git clone https://github.com/edbns/SocialSpy.git
+   cd SocialSpy
    ```
 
 2. **Install dependencies**
@@ -32,184 +106,150 @@ A modern, responsive YouTube analytics dashboard that provides comprehensive ins
 
 3. **Set up environment variables**
    
-   Create a `.env` file in the root directory:
+   Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` and add your API keys:
    ```env
+   # YouTube Data API v3 (optional)
    YOUTUBE_API_KEY=your_youtube_api_key_here
-   OPENAI_API_KEY=your_openai_api_key_here
-   NODE_ENV=development
+   
+   # OpenRouter API for AI Features
+   OPENROUTER_API_KEY=your_openrouter_api_key_here
    ```
 
-4. **Get API Keys**
-   
-   - **YouTube Data API v3**: 
-     - Go to [Google Cloud Console](https://console.cloud.google.com/)
-     - Create a new project or select existing one
-     - Enable YouTube Data API v3
-     - Create credentials (API key)
-   
-   - **OpenAI API** (optional):
-     - Sign up at [OpenAI](https://openai.com/)
-     - Generate an API key
-
-## 🚀 Development
-
-1. **Start development server**
+4. **Start the development server**
    ```bash
    npm run dev
    ```
 
-2. **Build for production**
-   ```bash
-   npm run build
-   ```
+5. **Open your browser**
+   Navigate to `http://localhost:5173`
 
-3. **Preview production build**
-   ```bash
-   npm run preview
-   ```
+## 🔑 API Keys Setup
 
-## 🌐 Deployment
+### YouTube Data API v3 (Optional)
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable YouTube Data API v3
+4. Create credentials (API key)
+5. Add the key to your `.env` file
+
+### OpenRouter (Required for AI Chat)
+1. Visit [OpenRouter](https://openrouter.ai/)
+2. Sign up for a free account
+3. Get your API key from the dashboard
+4. Add the key to your `.env` file
+
+**Note**: SocialSpy uses free DeepSeek models that don't require credits.
+
+## 📱 Usage
+
+### Getting Started
+1. **Browse Trending Content**: View worldwide trending content on the home page
+2. **Filter by Platform**: Use the sidebar to filter by YouTube, TikTok, Reddit, etc.
+3. **Search Content**: Use the search bar to find specific content
+4. **AI Chat**: Click the AI Chat button for insights and analysis
+5. **Create Account**: Sign up for personalized features
+
+### Features Overview
+
+#### Trending Content
+- Infinite scroll through trending items
+- Platform-specific filtering
+- Real-time refresh
+- Share and like functionality
+
+#### Analytics
+- Engagement metrics
+- Platform distribution
+- Performance insights
+- Data visualization
+
+#### AI Insights
+- Trend analysis
+- Sentiment analysis
+- Predictions
+- AI-powered recommendations
+
+#### Settings
+- Account management
+- Data source configuration
+- Privacy settings
+- API key management
+
+## 🌐 Platform Support
+
+- ✅ **YouTube**: Full API integration with video metadata
+- ✅ **Reddit**: Public JSON API for trending posts
+- 🚧 **TikTok**: Basic integration (expanding)
+- 🚧 **Twitter/X**: Basic integration (expanding)
+- 🚧 **Instagram**: Basic integration (expanding)
+- 📋 **Facebook**: Planned
+- 📋 **LinkedIn**: Planned
+- 📋 **Snapchat**: Planned
+
+*Use the toggle in the UI to disable platforms where data isn't working.*
+
+## 🚀 Deployment
 
 ### Netlify (Recommended)
 
-1. **Connect to Netlify**
-   - Push your code to GitHub
-   - Connect your repository to Netlify
-   - Set build command: `npm run build`
-   - Set publish directory: `dist`
+1. **Fork this repository**
 
-2. **Configure environment variables**
-   - Go to Netlify dashboard → Site settings → Environment variables
-   - Add your API keys:
-     - `YOUTUBE_API_KEY`
-     - `OPENAI_API_KEY`
+2. **Connect to Netlify**
+   - Go to [Netlify](https://netlify.com)
+   - Click "New site from Git"
+   - Select your forked repository
 
-3. **Deploy**
-   - Netlify will automatically deploy on every push to main branch
+3. **Configure build settings**
+   - Build command: `npm run build`
+   - Publish directory: `dist`
 
-### Manual Deployment
+4. **Add environment variables**
+   In Netlify dashboard, go to Site Settings > Environment Variables and add:
+   - `YOUTUBE_API_KEY`
+   - `OPENROUTER_API_KEY`
 
-1. **Build the project**
-   ```bash
-   npm run build
-   ```
+5. **Deploy**
+   Click "Deploy site"
 
-2. **Upload to your hosting provider**
-   - Upload the `dist` folder contents to your web server
-   - Ensure your hosting provider supports serverless functions
+### Other Platforms
 
-## 📁 Project Structure
-
-```
-SpyDash_Final_Build/
-├── functions/           # Netlify serverless functions
-│   ├── fetchYouTube.js  # YouTube API integration
-│   ├── summarize.js     # AI content summarization
-│   └── verifyOTP.js     # OTP verification system
-├── public/              # Static assets
-│   └── logo.png         # Application logo
-├── src/                 # Source code
-│   ├── main.js          # Main application logic
-│   └── style.css        # Styles and animations
-├── index.html           # Main HTML file
-├── vite.config.js       # Vite configuration
-├── package.json         # Dependencies and scripts
-└── README.md           # This file
-```
-
-## 🔧 Configuration
-
-### Vite Configuration
-The `vite.config.js` file is configured for:
-- Development server on port 3000
-- Production build optimization
-- Source maps for debugging
-- Public directory for static assets
-
-### Netlify Functions
-Each function in the `functions/` directory:
-- Handles CORS automatically
-- Includes error handling
-- Returns proper HTTP status codes
-- Supports both GET and POST requests
-
-## 🎨 Customization
-
-### Styling
-- Modify `src/style.css` to customize the appearance
-- The design uses CSS Grid and Flexbox for responsive layouts
-- Color scheme can be changed by modifying CSS custom properties
-
-### Functionality
-- Edit `src/main.js` to add new features
-- Modify Netlify functions to integrate with different APIs
-- Add new routes and components as needed
-
-## 🔒 Security
-
-- API keys are stored as environment variables
-- CORS is properly configured for all functions
-- OTP verification includes rate limiting
-- Session tokens are cryptographically secure
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **API Key Errors**
-   - Ensure your YouTube API key is valid and has the correct permissions
-   - Check that the API key is properly set in environment variables
-
-2. **CORS Errors**
-   - Functions include CORS headers, but ensure your domain is allowed
-   - Check browser console for specific error messages
-
-3. **Build Errors**
-   - Ensure all dependencies are installed: `npm install`
-   - Check Node.js version compatibility
-   - Clear cache: `npm run build -- --force`
-
-### Debug Mode
-
-Enable debug logging by setting:
-```env
-NODE_ENV=development
-DEBUG=true
-```
-
-## 📈 Performance
-
-- Lazy loading for better initial load times
-- Optimized images and assets
-- Efficient API calls with caching
-- Responsive design for all devices
+The application can be deployed to any static hosting service:
+- Vercel
+- GitHub Pages
+- AWS S3 + CloudFront
+- Firebase Hosting
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## 🙏 Acknowledgments
 
-For support and questions:
-- Create an issue on GitHub
-- Check the troubleshooting section
-- Review the documentation
+- [DeepSeek AI](https://deepseek.com/) for powerful AI models
+- [OpenRouter](https://openrouter.ai/) for AI API access
+- [Font Awesome](https://fontawesome.com/) for icons
+- [Google Fonts](https://fonts.google.com/) for typography
+- [Vite](https://vitejs.dev/) for build tooling
 
-## 🔄 Updates
+## 📞 Support
 
-Stay updated with the latest features and bug fixes by:
-- Following the repository
-- Checking the releases page
-- Reading the changelog
+For support, please open an issue on GitHub or contact the development team.
 
 ---
 
-**Built with ❤️ using Vite, Netlify Functions, and modern web technologies** 
+<div align="center">
+Made with ❤️ by the SocialSpy Team
+</div> 

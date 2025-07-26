@@ -18,10 +18,11 @@ class SpyDash {
                 subscribers: 0
             },
             platformDistribution: {
-                youtube: 45,
-                tiktok: 30,
+                youtube: 35,
+                tiktok: 25,
                 instagram: 15,
-                twitter: 10
+                twitter: 15,
+                reddit: 10
             },
             performance: {
                 growthRate: 12.5,
@@ -93,7 +94,7 @@ class SpyDash {
         }
     }
 
-    async loadTrendingContent(pageToken = null) {
+    async loadTrendingContent(pageToken = null, platform = null) {
         if (this.trendingLoading) return;
         this.trendingLoading = true;
         
@@ -103,32 +104,54 @@ class SpyDash {
         }
         
         try {
-            let url = '/.netlify/functions/fetchYouTube?query=trending technology';
-            if (pageToken) url += `&pageToken=${pageToken}`;
-            const response = await fetch(url);
-            if (response.ok) {
-                const data = await response.json();
-                console.log('YouTube API response:', data);
-                const newItems = data.items ? data.items.map((item, index) => ({
-                    id: (this.trendingContent.length + index + 1),
-                    platform: 'youtube',
-                    title: item.snippet?.title || 'Untitled',
-                    creator: item.snippet?.channelTitle || 'Unknown',
-                    views: 'N/A',
-                    thumbnail: 'icon-video',
-                    trending: true,
-                    videoId: item.id?.videoId || item.id,
-                    category: 'technology'
-                })) : [];
-                if (pageToken) {
-                    this.trendingContent = this.trendingContent.concat(newItems);
+            const targetPlatform = platform || this.currentPlatform || 'youtube';
+            let url, data, newItems = [];
+            
+            if (targetPlatform === 'reddit') {
+                url = '/.netlify/functions/fetchReddit?subreddit=all&limit=25';
+                if (pageToken) url += `&after=${pageToken}`;
+                
+                const response = await fetch(url);
+                if (response.ok) {
+                    data = await response.json();
+                    console.log('Reddit API response:', data);
+                    newItems = data.items || [];
+                    this.trendingNextPageToken = data.nextPageToken || null;
                 } else {
-                    this.trendingContent = newItems;
+                    console.error('Failed to fetch Reddit data:', response.status);
+                    if (!pageToken) this.loadMockTrendingContent();
                 }
-                this.trendingNextPageToken = data.nextPageToken || null;
             } else {
-                console.error('Failed to fetch YouTube data:', response.status);
-                if (!pageToken) this.loadMockTrendingContent();
+                // Default to YouTube for all other platforms (for now)
+                url = '/.netlify/functions/fetchYouTube?query=trending technology';
+                if (pageToken) url += `&pageToken=${pageToken}`;
+                
+                const response = await fetch(url);
+                if (response.ok) {
+                    data = await response.json();
+                    console.log('YouTube API response:', data);
+                    newItems = data.items ? data.items.map((item, index) => ({
+                        id: (this.trendingContent.length + index + 1),
+                        platform: 'youtube',
+                        title: item.snippet?.title || 'Untitled',
+                        creator: item.snippet?.channelTitle || 'Unknown',
+                        views: 'N/A',
+                        thumbnail: 'icon-video',
+                        trending: true,
+                        videoId: item.id?.videoId || item.id,
+                        category: 'technology'
+                    })) : [];
+                    this.trendingNextPageToken = data.nextPageToken || null;
+                } else {
+                    console.error('Failed to fetch YouTube data:', response.status);
+                    if (!pageToken) this.loadMockTrendingContent();
+                }
+            }
+            
+            if (pageToken) {
+                this.trendingContent = this.trendingContent.concat(newItems);
+            } else {
+                this.trendingContent = newItems;
             }
         } catch (error) {
             console.error('Error fetching trending content:', error);
@@ -180,6 +203,16 @@ class SpyDash {
                 thumbnail: 'icon-camera',
                 trending: true,
                 category: 'design'
+            },
+            {
+                id: 5,
+                platform: 'reddit',
+                title: 'Breaking: Major Tech Breakthrough',
+                creator: 'techexpert',
+                views: '15.2K upvotes',
+                thumbnail: 'icon-comment',
+                trending: true,
+                category: 'technology'
             }
         ];
     }
@@ -292,6 +325,58 @@ class SpyDash {
                 btn.onclick = () => this.toggleAiChat();
             }
         }, 100);
+        
+        // Ensure toast container exists
+        this.initToastContainer();
+    }
+
+    initToastContainer() {
+        if (!document.getElementById('toastContainer')) {
+            const toastContainer = document.createElement('div');
+            toastContainer.id = 'toastContainer';
+            toastContainer.className = 'toast-container';
+            document.body.appendChild(toastContainer);
+        }
+    }
+
+    showToast(title, message, type = 'info', duration = 4000) {
+        const toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const iconMap = {
+            success: 'icon-trending-up',
+            error: 'icon-trending-down',
+            info: 'icon-info',
+            warning: 'icon-lightbulb'
+        };
+
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="${iconMap[type] || 'icon-info'}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+        `;
+
+        toastContainer.appendChild(toast);
+
+        // Trigger animation
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Auto remove
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, duration);
     }
 
     renderDashboard() {
@@ -381,6 +466,10 @@ class SpyDash {
                             <button class="platform-btn" data-platform="twitter">
                                 <i class="icon-twitter"></i>
                                 <span>Twitter</span>
+                            </button>
+                            <button class="platform-btn" data-platform="reddit">
+                                <i class="icon-reddit"></i>
+                                <span>Reddit</span>
                             </button>
                         </div>
                         <!-- Category Filters -->
@@ -711,7 +800,8 @@ class SpyDash {
             'youtube': '<i class="icon-youtube"></i>',
             'tiktok': '<i class="icon-tiktok"></i>',
             'instagram': '<i class="icon-instagram"></i>',
-            'twitter': '<i class="icon-twitter"></i>'
+            'twitter': '<i class="icon-twitter"></i>',
+            'reddit': '<i class="icon-reddit"></i>'
         };
         return icons[platform.toLowerCase()] || '<i class="icon-globe"></i>';
     }
@@ -739,21 +829,24 @@ class SpyDash {
     }
 
     renderPieChart() {
-        const { youtube, tiktok, instagram, twitter } = this.analyticsData.platformDistribution;
+        const { youtube, tiktok, instagram, twitter, reddit } = this.analyticsData.platformDistribution;
         return `
             <svg width="200" height="200" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="none" stroke="#2e392e" stroke-width="40" 
                     stroke-dasharray="${youtube * 5.02} ${(100 - youtube) * 5.02}" 
                     stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#f8f6f4" stroke-width="40" 
+                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(46, 57, 46, 0.7)" stroke-width="40" 
                     stroke-dasharray="${tiktok * 5.02} ${(100 - tiktok) * 5.02}" 
                     stroke-dashoffset="${-youtube * 5.02}" transform="rotate(-90 100 100)"/>
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#e74c3c" stroke-width="40" 
+                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(46, 57, 46, 0.5)" stroke-width="40" 
                     stroke-dasharray="${instagram * 5.02} ${(100 - instagram) * 5.02}" 
                     stroke-dashoffset="${-(youtube + tiktok) * 5.02}" transform="rotate(-90 100 100)"/>
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#3498db" stroke-width="40" 
+                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(46, 57, 46, 0.3)" stroke-width="40" 
                     stroke-dasharray="${twitter * 5.02} ${(100 - twitter) * 5.02}" 
                     stroke-dashoffset="${-(youtube + tiktok + instagram) * 5.02}" transform="rotate(-90 100 100)"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(46, 57, 46, 0.15)" stroke-width="40" 
+                    stroke-dasharray="${reddit * 5.02} ${(100 - reddit) * 5.02}" 
+                    stroke-dashoffset="${-(youtube + tiktok + instagram + twitter) * 5.02}" transform="rotate(-90 100 100)"/>
             </svg>
         `;
     }
@@ -765,16 +858,20 @@ class SpyDash {
                 <span>YouTube</span>
             </div>
             <div class="legend-item">
-                <span class="legend-color" style="background: #f8f6f4;"></span>
+                <span class="legend-color" style="background: rgba(46, 57, 46, 0.7);"></span>
                 <span>TikTok</span>
             </div>
             <div class="legend-item">
-                <span class="legend-color" style="background: #e74c3c;"></span>
+                <span class="legend-color" style="background: rgba(46, 57, 46, 0.5);"></span>
                 <span>Instagram</span>
             </div>
             <div class="legend-item">
-                <span class="legend-color" style="background: #3498db;"></span>
+                <span class="legend-color" style="background: rgba(46, 57, 46, 0.3);"></span>
                 <span>Twitter</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: rgba(46, 57, 46, 0.15);"></span>
+                <span>Reddit</span>
             </div>
         `;
     }
@@ -1090,6 +1187,10 @@ class SpyDash {
                             <div class="platform-stat">
                                 <div class="platform-name">Twitter</div>
                                 <div class="platform-percentage">${this.analyticsData.platformDistribution.twitter}%</div>
+                            </div>
+                            <div class="platform-stat">
+                                <div class="platform-name">Reddit</div>
+                                <div class="platform-percentage">${this.analyticsData.platformDistribution.reddit}%</div>
                             </div>
                         </div>
                     </div>
@@ -1504,8 +1605,8 @@ class SpyDash {
             });
         }
 
-        // Platform filters
-        const platformFilters = document.querySelectorAll('.platform-filter');
+        // Platform filters and buttons
+        const platformFilters = document.querySelectorAll('.platform-filter, .platform-btn');
         platformFilters.forEach(filter => {
             filter.addEventListener('click', () => {
                 const platform = filter.dataset.platform;
@@ -1785,19 +1886,32 @@ class SpyDash {
 
     filterByPlatform(platform) {
         if (platform === 'all') {
+            this.currentPlatform = 'youtube'; // Default to YouTube for "all"
+            this.showToast('All Platforms', 'Showing trending content from all platforms', 'info');
             this.showSection('trending');
             return;
         }
         
-        if (!this.trendingContent) {
-            this.trendingContent = [];
-        }
+        // Update current platform and reload content
+        this.currentPlatform = platform;
+        this.trendingContent = [];
+        this.trendingNextPageToken = null;
         
-        const filteredContent = this.trendingContent.filter(item => 
-            item.platform && item.platform.toLowerCase() === platform.toLowerCase()
-        );
+        // Show platform switch notification
+        const platformNames = {
+            youtube: 'YouTube',
+            tiktok: 'TikTok',
+            instagram: 'Instagram',
+            twitter: 'Twitter',
+            reddit: 'Reddit'
+        };
+        this.showToast(`Switched to ${platformNames[platform] || platform}`, `Loading trending content from ${platformNames[platform] || platform}...`, 'success');
         
-        this.renderFilteredContent(filteredContent, platform);
+        // Load fresh content for the selected platform
+        this.loadTrendingContent(null, platform);
+        
+        // Show trending section with new content
+        this.showSection('trending');
     }
 
     filterByCategory(category) {

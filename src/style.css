@@ -8,6 +8,7 @@
 .icon-tiktok::before { content: '\e07b'; font-family: 'Font Awesome 6 Brands'; }
 .icon-instagram::before { content: '\f16d'; font-family: 'Font Awesome 6 Brands'; }
 .icon-twitter::before { content: '\f099'; font-family: 'Font Awesome 6 Brands'; }
+.icon-reddit::before { content: '\f1a1'; font-family: 'Font Awesome 6 Brands'; }
 .icon-concierge::before { content: '\f075'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
 .icon-close::before { content: '\f00d'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
 .icon-send::before { content: '\f1d8'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
@@ -95,6 +96,15 @@ i[class^="icon-"] {
     margin-right: 0.5rem;
 }
 
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6,
+.section-header h3,
+.sidebar-header h1,
+.auth-header h3,
+.content-title {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+}
+
 /* Base Styles */
 * {
     margin: 0;
@@ -103,7 +113,7 @@ i[class^="icon-"] {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #f8f6f4 0%, #e8e6e4 100%);
     color: #2e392e;
     line-height: 1.6;
@@ -115,6 +125,24 @@ body {
     display: flex;
     min-height: 100vh;
     background: #f8f6f4;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glassmorphism background effect */
+.main-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(248, 246, 244, 0.1) 0%, 
+        rgba(46, 57, 46, 0.05) 50%, 
+        rgba(248, 246, 244, 0.1) 100%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .main {
@@ -347,7 +375,7 @@ body {
 .sidebar {
     width: 280px;
     height: 100vh;
-    background: #2e392e;
+    background: linear-gradient(180deg, #2e392e 0%, #1e2e1e 100%);
     color: #f8f6f4;
     position: fixed;
     left: 0;
@@ -355,7 +383,9 @@ body {
     z-index: 1000;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(248, 246, 244, 0.1);
 }
 
 .sidebar.collapsed {
@@ -1026,6 +1056,116 @@ body {
     
     .stat-item {
         font-size: 0.75rem;
+    }
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.toast {
+    background: #2e392e;
+    color: #f8f6f4;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(46, 57, 46, 0.15);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 300px;
+    max-width: 400px;
+    font-family: 'Figtree', sans-serif;
+    font-size: 0.9rem;
+    border: 1px solid rgba(248, 246, 244, 0.1);
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background: #27ae60;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.toast.error {
+    background: #e74c3c;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.toast.info {
+    background: #3498db;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.toast-icon {
+    font-size: 1.1rem;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-family: 'EB Garamond', serif;
+}
+
+.toast-message {
+    opacity: 0.9;
+    font-size: 0.85rem;
+}
+
+/* Loading Spinner Enhancement */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(46, 57, 46, 0.1);
+    border-radius: 50%;
+    border-top-color: #2e392e;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Platform Button Enhancement */
+.platform-btn.active {
+    background: #2e392e;
+    color: #f8f6f4;
+    box-shadow: 0 2px 8px rgba(46, 57, 46, 0.2);
+}
+
+.platform-btn:not(.active):hover {
+    background: rgba(46, 57, 46, 0.1);
+}
+
+/* Smooth Page Transitions */
+.section-content {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
