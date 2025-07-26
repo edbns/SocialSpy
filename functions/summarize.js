@@ -128,7 +128,7 @@ async function generateOpenRouterSummary(text, maxLength, apiKey, headers) {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
           'HTTP-Referer': 'https://your-site.netlify.app',
-          'X-Title': 'SpyDash Analytics'
+                          'X-Title': 'SocialSpy Analytics'
         },
         timeout: 10000 // 10 second timeout
       }

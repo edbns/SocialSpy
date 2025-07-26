@@ -1,6 +1,6 @@
 import './style.css';
 
-class SpyDash {
+class SocialSpy {
     constructor() {
         this.app = document.getElementById('app');
         this.isAuthenticated = false;
@@ -82,7 +82,7 @@ class SpyDash {
         setTimeout(() => {
             this.attachEventListeners();
         }, 100);
-        console.log('SpyDash running');
+        console.log('SocialSpy running');
     }
 
     checkAuthStatus() {
@@ -2886,4 +2886,4 @@ class SpyDash {
 }
 
 // Initialize the application
-new SpyDash();
+new SocialSpy();
